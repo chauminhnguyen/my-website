@@ -1,0 +1,108 @@
+.info {
+    height: 100vh;
+    overflow: auto;
+    background: url("/home/bg1.png");
+    background-repeat:no-repeat;
+    background-size:cover;
+    background-position:center;
+
+    nav {
+        ul {
+            list-style-type: none;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 50px;
+            padding-top: 20px;
+            column-gap: 50px;
+            padding-bottom: 50px;
+            li {
+                transform: scale(2);
+                i {
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .info-container {
+        display: grid;
+        grid-template-areas: 
+        'desc pfp'
+        'skill skill';
+        grid-gap: 50px;
+        grid-template-columns: 50% auto;
+
+        @media only screen and (min-width: 1600px) {
+            grid-template-areas: 
+            'desc pfp'
+            'skill pfp';
+        }
+
+        @media only screen and (max-width: 800px) {
+            display: flex;
+            flex-direction: column;
+            img {
+                display: none;
+            }
+
+            .desc-info {
+                padding: 0px 50px;
+            }
+
+            .skill-container {
+                padding: 0px 50px;
+            }
+        }
+
+        .desc-info {
+            grid-area: desc;
+            padding-left: 100px;
+
+            h1 {
+                font-size: calc(min(max(20px, 4vw), 45px));
+                font-weight: bold;
+            }
+
+            h2 {
+                font-size: calc(min(max(15px, 2vw), 20px));
+                padding-top: 25px;
+                text-align: justify;
+                text-justify: inter-word;
+            }
+        }
+
+        .skill-container {
+            padding-left: 100px;
+            grid-area: skill;
+            display: flex;
+            h2 {
+                // text-decoration: underline;
+                font-weight: bold;
+                justify-content: center;
+                font-size: calc(min(max(15px, 2vw), 25px));
+                max-width: 100px;
+                padding: 5px;
+            }
+
+            ul {
+                margin: 0px 0px;
+                padding-left: 50px;
+                color: white;
+                font-size: calc(min(max(15px, 2vw), 25px));
+            }
+        }
+
+        img {
+            grid-area: pfp;
+            mix-blend-mode: luminosity;
+            border-radius: 10%;
+            box-shadow: 0px 4px 8px black;
+            // transform: scale(75%);
+            // transform: scale(75%);
+            width: 75%;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+}
