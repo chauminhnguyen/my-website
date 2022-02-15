@@ -1,0 +1,664 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Convolutional Neural Networks</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+	font-size: 100%;
+	background-color: black;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		/* color: rgb(55, 53, 47); */
+		color: rgb(214, 214, 214);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a419a123-6762-477b-852e-af0b11fc51c1" class="page sans"><header><h1 class="page-title">Convolutional Neural Networks</h1></header><div class="page-body"><h2 id="f78fadd6-f34f-4164-9874-ad185ccfb831" class="">What is Convolution ?</h2><p id="86d37c42-11e7-4a70-a1c9-87c998897997" class="">Convolution is a <strong>function</strong> that apply a sliding window <em>(yellow) </em>to a matrix <em>(green).</em></p><p id="e9837a26-d1de-40fc-a134-4919117ec348" class="">Sliding window is also known as kernel, filter or feature detection.</p><figure id="5f0ee0a5-5e70-4c49-b023-43cdb785273a" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled.png"><img style="width:526px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled.png"/></a><figcaption>Convolution above applies filter to a binary image (Left) and output is a Feature Map or Convolved Feature (Right)</figcaption></figure><p id="541c4907-953c-4bc7-9504-859978f4356f" class="">Each filter will be applied to 1 channel. So if you want to do a convolution to an RBG image and get information of 3 channels, you need to apply the filter 3 times.</p><figure id="dc9e57f7-5051-4ed4-b5bb-df515b3d7939" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%201.png"><img style="width:1000px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%201.png"/></a><figcaption>Convolution applies filters to an RBG image</figcaption></figure><p id="80fe0d5c-eb58-4f7d-b70b-946bfa5e9d86" class="">The Convolution can be visualize as below:</p><p id="e6b1e6f5-f791-41a3-8751-dad19243fd4e" class="">
+</p><figure id="c001a40a-48a2-4dc7-ae53-fc040f6e72c7" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%202.png"><img style="width:326px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%202.png"/></a><figcaption>Convolution of an 3-channel image</figcaption></figure><p id="a870cd0e-471b-43cd-b59a-c9e239c1799d" class="">For each filter we will get different feature. Therefore when you apply <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span><span>﻿</span></span> filters to an image you will get <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span><span>﻿</span></span> features.</p><figure id="4d5328cd-b86e-42ae-af31-22f2eee545f2" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%203.png"><img style="width:855px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%203.png"/></a></figure><p id="daf4ff97-a347-48b7-bcec-ae16004b2e15" class="">The convolution will give us features related to input image, so what is feature and why do we have to get it.</p><h2 id="7aa7e3b3-f2b5-4271-86ea-b03ef445aaf7" class="">Feature</h2><p id="7104eaf3-3198-4c1d-b6a3-d30b28b95f0c" class="">Let think about it, if you want to recognize a person for example a girl, you will notice that girl has <strong>black hair, white skin, short and black eyes.</strong> All of those characters are also known as features.</p><p id="7460823d-f4d0-40f2-a93d-e55849672991" class="">In computer vision, computer classify object by detect several features, for example an image below shows a cat:</p><figure id="592e15cb-e9a5-438d-866a-822c09df3309" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%204.png"><img style="width:261px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%204.png"/></a></figure><p id="a2aad60e-2748-4f8e-8c39-2d1c010a442e" class="">Computer can extract features from the image, particularly is an image below shows the channel encoded a diagonal edge detector:</p><figure id="76a92ac8-29f9-4a4b-8e30-aed2363e73a6" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%205.png"><img style="width:267px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%205.png"/></a></figure><p id="2ee0919d-fb23-4ed2-b6eb-119ebc8a0742" class="">This one below looks like a &quot;bright green dot&quot; detector, useful to encode cat eyes:</p><figure id="37859ee9-d321-4f1a-8f80-87002fde1c0d" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%206.png"><img style="width:267px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%206.png"/></a></figure><p id="1f77c0af-7481-44a0-9240-fcc42c28a827" class="">In computer vision, there are 3 types of features:<div class="indented"><ul id="34ef0224-2a07-4f14-964d-53ac080be95b" class="bulleted-list"><li style="list-style-type:disc">Low-Level Feature:<p id="7023b912-9e78-4459-bc83-3303ee14c0bb" class="">Consider as local properties of an image.</p></li></ul><ul id="4928d8d0-970b-41ad-9da6-9d8fca9a2c48" class="bulleted-list"><li style="list-style-type:disc">Mid-Level Feature:<p id="03fe429c-5b12-49d4-90b2-92ffdb679e5e" class="">Grouping and Segmentation.</p></li></ul><ul id="4df78683-928e-4e1a-ae26-271eddc3f456" class="bulleted-list"><li style="list-style-type:disc">High-Level Feature:<p id="71015efe-a247-44fc-a41c-e20e4360b502" class="">Recognition.</p></li></ul></div></p><p id="051e13dc-d1e5-47ff-9a00-d9afe8b9e437" class=""><strong>Conclusion:</strong> We use Convolution to extract features of an image to do task related to that image (e.g: Recognition, Segmentation, Image Retrieval,...)</p><h2 id="9bc15a37-356e-49a9-9e73-9186b34374e8" class="">What is Convolutional Neural Networks ?</h2><p id="3cc9c35a-080a-474d-9104-7a6ecc08660d" class="">CNN is basically a feedforward neural network, but the main difference between it and MLP is <strong>convolution</strong> and <strong>pooling.</strong></p><figure id="a7487004-8ec9-4c9d-b783-04fbf148058b" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%207.png"><img style="width:602px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%207.png"/></a></figure><p id="b6ed9977-5f36-4437-bdde-338c3d573949" class="">In a traditional feedforward neural network we connect each input neuron to each output neuron in the next layer. That’s also called a fully connected layer, or affine layer. In CNNs we don’t do that. Instead, we use convolutions over the input layer to compute the output. This results in local connections, where each region of the input is connected to a neuron in the output. Each layer applies different filters. There’s also something called pooling (subsampling) layers.</p><figure id="682e081a-f923-4696-93e9-3bbffcd76fe4" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%208.png"><img style="width:1024px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%208.png"/></a></figure><p id="ae1191b1-c452-430f-a51a-cff89998fecf" class="">During the training phase, a CNN automatically learns the values of its filters based on the task you want to perform. For example, in Image Classification a CNN may learn to detect edges from raw pixels in the first layer, then use the edges to detect simple shapes in the second layer, and then use these shapes to deter higher-level features, such as facial shapes in higher layers. The last layer is then a classifier that uses these high-level features.</p><p id="792fd48b-dc14-48c0-8808-31c94f2fc29b" class="">There are two aspects of this computation worth paying attention to: <strong>Location Invariance </strong>and <strong>Compositionality</strong>. Let’s say you want to classify whether or not there’s an elephant in an image. <div class="indented"><ul id="0fcf8ff9-db5c-4887-819c-6307378bd2ff" class="bulleted-list"><li style="list-style-type:disc">Because you are sliding your filters over the whole image you don’t really care where the elephant occurs. In practice, pooling also gives you invariance to translation, rotation and scaling, but more on that later. </li></ul><ul id="17ee81e4-1649-492c-9940-774aa58ad217" class="bulleted-list"><li style="list-style-type:disc">The second key aspect is (local) compositionality. Each filter composes a local patch of lower-level features into higher-level representation. That’s why CNNs are so powerful in Computer Vision. It makes intuitive sense that you build edges from pixels, shapes from edges, and more complex objects from shapes.</li></ul></div></p><p id="7b31cf52-3317-4049-a8b0-c3214be328f8" class="">
+</p><p id="8baad689-4254-447f-928e-08a407f5d753" class="">
+</p><ul id="cdd30b0b-4e17-4d9e-8588-f888345c064a" class="bulleted-list"><li style="list-style-type:disc">Invariance to the affine transformations</li></ul><ul id="e3f26d67-24f1-4b39-a672-6c7ab3fe1488" class="bulleted-list"><li style="list-style-type:disc">These characteristics of affine invariance are introduced due to three main properties of the CNN architecture.</li></ul><h2 id="e34572ea-4796-4ef2-995f-b40cbbbbb742" class="">How CNN see the world ?</h2><p id="34f8ab1c-c4d1-4015-94f1-934314d1ebe9" class="">We will use CNN architecture as below:</p><p id="ae7bfe05-1dac-4b2a-a290-897bc92d88a0" class="">_________________________________________________________________</p><p id="f6376f5c-a681-4e17-a90d-06a636ff7524" class="">Layer (type)                 Output Shape              Param #</p><p id="598b7d9c-de8d-432f-98b0-9188f0c0fa12" class="">=======================================</p><p id="7010953f-e4c0-4a0f-974f-783d7e43b38f" class="">conv2d_5 (Conv2D)            (None, 148, 148, 32)      896</p><p id="d04a3ae8-e939-4cc0-9c1d-d3ec3823922c" class="">_________________________________________________________________</p><p id="7cc77bec-509b-4789-ac0c-830f3e32f09e" class="">max_pooling2d_5 (MaxPooling2 (None, 74, 74, 32)        0</p><p id="a11d0743-da0e-4f3a-b1a4-f732d6875d22" class="">_________________________________________________________________</p><p id="0f9abde9-a5cb-4efa-a129-f37e87a1b206" class="">conv2d_6 (Conv2D)            (None, 72, 72, 64)        18496</p><p id="dc648c93-6e2e-43a7-9739-103ecedc3b40" class="">_________________________________________________________________</p><p id="bcc14245-1742-47cd-932e-bd6fed0c0982" class="">max_pooling2d_6 (MaxPooling2 (None, 36, 36, 64)        0</p><p id="e9497ee2-1efe-4464-a25a-6058f657b971" class="">_________________________________________________________________</p><p id="0cc71560-6c74-4db2-b1ef-09bf9bbd571f" class="">conv2d_7 (Conv2D)            (None, 34, 34, 128)       73856</p><p id="049894bf-7e49-4de0-b81a-ad455836dfcd" class="">_________________________________________________________________</p><p id="d27b5eb0-17ee-4b2f-99c8-dac6a347ea91" class="">max_pooling2d_7 (MaxPooling2 (None, 17, 17, 128)       0</p><p id="446bcee9-a3bb-4082-ad7e-9e62e23d6d91" class="">_________________________________________________________________</p><p id="697b55ba-63a3-4f54-95de-2eefe9e6839b" class="">conv2d_8 (Conv2D)            (None, 15, 15, 128)       147584</p><p id="6741b055-9e1c-4f0f-ab37-ca71ad7c19db" class="">_________________________________________________________________</p><p id="f21dc8a0-fbb3-4298-b8b3-b5896ee2eeca" class="">max_pooling2d_8 (MaxPooling2 (None, 7, 7, 128)         0</p><p id="aa1a9f26-1d92-4b17-9c26-cba2f8c8db5c" class="">_________________________________________________________________</p><p id="92530fd3-0856-4637-b2f0-1a1f7b3b1143" class="">flatten_2 (Flatten)          (None, 6272)              0</p><p id="0e428260-c23b-4e4c-8213-3f9c9ed94b65" class="">_________________________________________________________________</p><p id="cff4ee4b-40c7-4c94-94c2-92af404b7954" class="">dropout_1 (Dropout)          (None, 6272)              0</p><p id="0d1ee222-f41b-430e-b184-96671905dc36" class="">_________________________________________________________________</p><p id="9b99f782-9dab-4244-99ce-9bbf7ccdc8c1" class="">dense_3 (Dense)              (None, 512)               3211776</p><p id="03c2a8eb-335b-47bd-932a-e60601302757" class="">_________________________________________________________________</p><p id="c60bbbf5-ff03-4853-ab6c-5ba27e37d556" class="">dense_4 (Dense)              (None, 1)                 513</p><p id="79c7dd63-fec9-48f0-8cab-4d1854029248" class="">=======================================</p><p id="8bf8364a-bdb3-47e1-b837-8db7fa64acaf" class="">Total params: 3,453,121</p><p id="ed2db318-63fd-4ee1-8f5b-a4d369f22e55" class="">Trainable params: 3,453,121</p><p id="01ccb54d-345e-4d1e-8a26-5043adb3af6a" class="">Non-trainable params: 0</p><p id="11acd3a9-ff5f-44bc-b874-f0302d5e5b8a" class="">_________________________________________________________________</p><figure id="28bb604d-472d-4b30-947d-77f05eed0597" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%209.png"><img style="width:936px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%209.png"/></a></figure><figure id="0b61494f-ba98-4a36-93e7-ee4a005e186c" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2010.png"><img style="width:936px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2010.png"/></a></figure><figure id="7d9ce3bb-453f-4ac4-82ba-a57a98cac758" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2011.png"><img style="width:936px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2011.png"/></a></figure><figure id="d22e043e-7337-4298-b097-e2fa2f522b43" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2012.png"><img style="width:936px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2012.png"/></a></figure><figure id="2569200b-abde-4cb3-bc14-1faabb4508ac" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2013.png"><img style="width:936px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2013.png"/></a></figure><figure id="8d59a48d-2374-4337-9812-96e01dd1f10a" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2014.png"><img style="width:936px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2014.png"/></a></figure><figure id="806e206a-7575-42ea-9294-f139fac2da09" class="image"><a href="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2015.png"><img style="width:930px" src="Convolutional%20Neural%20Networks%205f0ee0a55e704c49b02343cdb785273a/Untitled%2015.png"/></a></figure><p id="8bd7f8df-6d2b-4051-a428-a632fcb8dd15" class="">A few remarkable things to note here:</p><ul id="f6f90917-4f6f-4e5a-b3d5-82c99a33bd9c" class="bulleted-list"><li style="list-style-type:disc">The first layer acts as a collection of various edge detectors. At that stage, the activations are still retaining almost all of the information present in the initial picture.</li></ul><ul id="3fd96339-73ae-4187-8e9d-f423a2fb97fc" class="bulleted-list"><li style="list-style-type:disc">As we go higher-up, the activations become increasingly abstract and less visually interpretable. They start encoding higher-level concepts such as &quot;cat ear&quot; or &quot;cat eye&quot;. Higher-up presentations carry increasingly less information about the visual contents of the image, and increasingly more information related to the class of the image.</li></ul><ul id="e80b5e37-b7e7-451b-80b1-0a741e9639dc" class="bulleted-list"><li style="list-style-type:disc">The sparsity of the activations is increasing with the depth of the layer: in the first layer, all filters are activated by the input image, but in the following layers more and more filters are blank. This means that the pattern encoded by the filter isn&#x27;t found in the input image.</li></ul><p id="a35860db-232b-4c40-b31b-2044f6a8a57f" class="">
+</p></div></article></body></html>
