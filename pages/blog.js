@@ -16,18 +16,20 @@ export default function Blog(props) {
                 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet" />
                 <title>Chow&apos;s Website</title>
             </Head>
-            <body>
+            <body className='blog-body'>
+                <h1>My Blog</h1>
                 <section className="blog" id="blog-section">
-                    <h1>My Blog</h1>
-                    {
-                        props.fileNames.map((ele) => (
-                            <Article 
-                            key={ele.replace(".html", "")}
-                            thumbnail="./temp/article_t.png" 
-                            title= {ele.replace(".html", "")} 
-                            desc="Ay lmao diz iz a desc Ay lmao diz iz a desc Ay lmao diz iz a desc"/>
-                        ))
-                    }
+                    <div className='blog-container'>
+                        {
+                            props.fileNames.map((ele) => (
+                                <Article 
+                                key={ele.replace(".html", "")}
+                                thumbnail="./temp/article_t.png" 
+                                title= {ele.replace(".html", "")} 
+                                desc="Ay lmao diz iz a desc Ay lmao diz iz a desc Ay lmao diz iz a desc"/>
+                            ))
+                        }
+                    </div>
                 </section>
             </body>
         </html>
