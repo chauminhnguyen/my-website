@@ -14,7 +14,7 @@ export default function Home() {
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
                 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet" />
-                <title>Chow&aposs Website</title>
+                <title>Chow's Website</title>
             </Head>
             <body>
                 <Intro />
