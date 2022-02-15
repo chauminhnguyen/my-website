@@ -10,6 +10,7 @@ export default function Blog(props) {
             {
                 props.fileNames.map((ele) => (
                     <Article 
+                    key={ele.replace(".html", "")}
                     thumbnail="./temp/article_t.png" 
                     title= {ele.replace(".html", "")} 
                     desc="Ay lmao diz iz a desc Ay lmao diz iz a desc Ay lmao diz iz a desc"/>
