@@ -1,0 +1,664 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>YOLOv4</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+	font-size: 100%;
+	background-color: black;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		/* color: rgb(55, 53, 47); */
+		color: white;
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="4293aa7e-561a-4378-aec0-f16332c60b32" class="page sans"><header><h1 class="page-title">YOLOv4</h1></header><div class="page-body"><h1 id="17575c74-c6b0-41f2-93f4-9f0088d1ac36" class="">Components</h1><p id="24f7af58-f19e-493d-a0c2-846dfa61800b" class="">Object Detection has 3 components:</p><ol type="1" id="002aef16-1cca-436c-a40e-a05600df2fd7" class="numbered-list" start="1"><li>Backbone</li></ol><ol type="1" id="172fd3ba-83a9-40d4-87d2-5d07d1c86ddc" class="numbered-list" start="2"><li>Neck</li></ol><ol type="1" id="36282be2-c569-4125-9970-48d7995b0e25" class="numbered-list" start="3"><li>Detector:<ol type="a" id="0bec6e3a-a2ca-49af-8e17-668860ad6687" class="numbered-list" start="1"><li>Dense Prediction: Used by one-stage-detection (YOLO, SSD,...)</li></ol><ol type="a" id="eb806df3-300c-4a88-80ef-af096b206e8d" class="numbered-list" start="2"><li>Sparse Prediction: Used by two-stage-detection (RCNN,...)</li></ol></li></ol><figure id="bae8f587-efee-4f20-b5c8-0f63b8c29be0" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled.png"><img style="width:1108px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled.png"/></a></figure><p id="2bf463f0-9efe-4b4a-a425-577e3626bd15" class="">================================================================</p><figure id="a15d637d-05df-4d4c-a750-8ed83ea4ebd4" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%201.png"><img style="width:302px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%201.png"/></a></figure><p id="e6e0354c-354f-42de-922b-ab2e8533d32a" class="">================================================================</p><figure id="0f939a88-a102-4a7a-9113-1501a488e4df" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%202.png"><img style="width:399px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%202.png"/></a><figcaption><a href="https://github.com/AlexeyAB/darknet/wiki/YOLOv4-model-zoo">https://github.com/AlexeyAB/darknet/wiki/YOLOv4-model-zoo</a></figcaption></figure><p id="585078b9-347e-4a3a-b333-448c383fd147" class="">================================================================</p><h1 id="bbe52267-bfb1-4381-89f7-143eafdcbe49" class="">Bag Of Freebies &amp; Bag Of Special</h1><p id="78b97e31-2509-4fff-af00-45d317e0eaca" class=""><strong>Bag Of Freebies</strong>: Methods for improve performance while not changing inference speed: Data Augmentation, Class Imbalance, Cost Function, Soft Labeling.</p><p id="c40946de-f539-4b19-a5b9-d2cd15125d46" class=""><strong>Bag Of Special</strong>: Methods use a bit inference speed to profusely improve accuracy: Increase Receptive Field, Attention, Feature Intergration (combine information of features) like Skip Connection, FPN, NMS.</p><h1 id="1941c5ac-e099-4754-84ff-6ba4e569fb56" class="">Backbone</h1><h2 id="dec3c3c5-f023-4d32-81bc-8b2488738366" class=""><strong>Bag Of Freebies for YOLOv4 Backbone</strong>:</h2><ul id="242ba8d9-55b6-4dad-8825-162555aa6332" class="bulleted-list"><li style="list-style-type:disc"><strong>CutMix data augmentation:</strong><figure id="54a85bbb-7dd0-40f9-b2b7-06088fa3dcac" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%203.png"><img style="width:206px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%203.png"/></a></figure></li></ul><ul id="8eff9f2e-2109-4d5c-8226-81dc014f6f6d" class="bulleted-list"><li style="list-style-type:disc"><strong>Mosaic data augmentation:</strong></li></ul><figure id="ea577bc4-adbf-4e2e-9edc-98c8ba2906be" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%204.png"><img style="width:1108px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%204.png"/></a></figure><ul id="532c4b77-63df-4244-8a85-aab62817af5d" class="bulleted-list"><li style="list-style-type:disc"><strong>DropBlock regulazation:</strong></li></ul><figure id="5234de55-078c-4739-b026-7f534a97c167" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%205.png"><img style="width:1105px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%205.png"/></a></figure><ul id="cfc7d8b6-2bca-4302-9991-f24b8e7611d4" class="bulleted-list"><li style="list-style-type:disc"><strong>Class Label smoothing:</strong> Replace 1.0 → 0.9 in one-hot encoding ⇒ When model predict right class still have loss ⇒ Avoid over confident ⇒ Avoid overfitting.</li></ul><h2 id="b8bc0d39-ba3a-4129-97cf-10cd819ee342" class=""><strong>Bag Of Special for YOLOv4 Backbone</strong>:</h2><ul id="92fe2635-9a7e-4c1d-a9be-edfcc67fae54" class="bulleted-list"><li style="list-style-type:disc">Mish Activation</li></ul><ul id="72cf4e6a-39f9-46ee-ba3f-244e8b04e05d" class="bulleted-list"><li style="list-style-type:disc">Cross Stage Partial Connection (CSP)</li></ul><ul id="c7721319-f5b7-49c6-b4bd-a95d5652e04b" class="bulleted-list"><li style="list-style-type:disc">Multi-input Weighted Residual Connections (MiWRC)</li></ul><h3 id="2f335cbe-817e-43b6-8082-0cf38ae39200" class="block-color-orange"><strong>Dense Block &amp; Dense Net</strong></h3><p id="0e9e0470-1e0f-4b1f-b33a-367ade8e584e" class="">Deeper layer means increase in accuracy. However, due to the complexity ⇒ Skip connection.</p><p id="239985b5-63f9-4e1a-834f-b220d3f6ab99" class="">Dense Net has many DenseBlock:</p><figure id="17a74fae-2535-4d53-b737-8605a29a9755" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%206.png"><img style="width:586px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%206.png"/></a></figure><p id="73109eaf-0f07-4f0e-81bf-fa3b5224ffdb" class="">Dense Block has many Conv <strong>x(i)</strong> and <strong>H(i) (Batch Normalization + ReLU + Conv)</strong>.</p><figure id="44b78c32-483c-44b9-bf75-e72c28dedce8" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%207.png"><img style="width:583px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%207.png"/></a></figure><h3 id="d9823a2c-0145-40d5-8de8-9fe72153ddb8" class="block-color-orange"><strong>Cross Stage Partial Connection (CSP)</strong></h3><figure id="bd45906c-9e56-46df-bceb-98e6294b9bda" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%208.png"><img style="width:585px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%208.png"/></a></figure><p id="03d46b6f-974b-4de3-8ff2-5f9d462444b9" class="">Input will be <strong>divide </strong>into 2 input, one will put to Dense Block (Part 2), and the other (Part 1) concatenate with the transition.</p><figure id="6efa16f5-7b52-4a7f-81d8-0d25d6b03d82" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%209.png"><img style="width:824px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%209.png"/></a></figure><figure id="928adb78-1455-4815-b6c6-cda57d00e234" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2010.png"><img style="width:807px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2010.png"/></a></figure><ul id="4b6fafe2-62e7-469c-af80-12217b40ed03" class="bulleted-list"><li style="list-style-type:disc">This will maintain part of information of the previous layer.</li></ul><ul id="c19cdea5-43e9-426a-be2e-59f53e5c2276" class="bulleted-list"><li style="list-style-type:disc">Decrease complexity.</li></ul><h2 id="b6ce151d-9f06-40ae-8ac9-ae5641641cf6" class="block-color-orange"><strong>CSPDarknet53</strong></h2><p id="53ceb84a-5636-484b-b247-290f0b2e42b4" class="">CSPDarknet53 is the Yolov4 backbone due to the high performance in object detection task than ResNet. However ResNet have higher performance in classification ⇒ Can use <strong>Mish activation</strong>.</p><h3 id="f1608e66-2406-4881-99d5-fda44e31a9cc" class="block-color-orange"><strong>Mish Activation</strong></h3><p id="33665cd1-b5cc-4ff0-99bd-0174e7e6057c" class="">Produced on 08/2019</p><figure id="fd82b354-eeca-4eb1-bd8d-b866c1613bb9"><a href="https://github.com/digantamisra98/Mish" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">digantamisra98/Mish</div><div class="bookmark-description">BMVC 2020 (Official Paper) Notes: (Click to expand) A considerably faster version based on CUDA can be found here - Mish CUDA (All credits to Thomas Brandon for the same) Memory Efficient Experimental version of Mish can be found here Faster variants for Mish and H-Mish by Yashas Samaga can</div></div><div class="bookmark-href"><img src="https://github.com/favicon.ico" class="icon bookmark-icon"/>https://github.com/digantamisra98/Mish</div></div><img src="https://repository-images.githubusercontent.com/185998708/3d144a80-e3b0-11e9-8d2a-6dcbd3d902cf" class="bookmark-image"/></a></figure><figure id="6910188b-f725-467f-89d5-adcf3e513989" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2011.png"><img style="width:290px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2011.png"/></a></figure><figure id="6342e1c4-8bd7-401b-abd4-98fc26b2f6dd" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2012.png"><img style="width:345px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2012.png"/></a></figure><ul id="decd4c5e-c814-4671-ac89-4315adebb8e9" class="bulleted-list"><li style="list-style-type:disc">Y Range: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>0.31</mn><mo separator="true">,</mo><mi mathvariant="normal">∞</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(-0.31,\infty)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">0.31</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∞</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="97ba4811-f28a-42a2-9677-04f507dfbc3d" class="bulleted-list"><li style="list-style-type:disc">Doesn&#x27;t have upper bound.</li></ul><ul id="ab8da90d-cceb-4e34-87e4-3c2e52c55238" class="bulleted-list"><li style="list-style-type:disc">Has lower bound.</li></ul><ul id="eafdba5c-e68c-4bda-b347-137ca2110d37" class="bulleted-list"><li style="list-style-type:disc">Has a bit negative gradient for model to learn better.</li></ul><ul id="5f4e654a-096c-47bb-ba12-cee33fc68896" class="bulleted-list"><li style="list-style-type:disc">Continuous (RELU doesn&#x27;t have gradient at x=0)</li></ul><ul id="12c27ac6-0177-4635-9cbd-e2be9c9474ab" class="bulleted-list"><li style="list-style-type:disc">Smoother than others ⇒ transfer information to deeper layers ⇒ Increase accuracy, generalization.</li></ul><h3 id="2a4fe7b9-b41f-475b-852c-6f3727b12f41" class="block-color-orange"><strong>Multi-input Weighted Residual Connection (MiWRC)</strong></h3><ul id="faf5529f-b1fa-40ff-bd41-67b213bae47f" class="bulleted-list"><li style="list-style-type:disc"><strong>Inverted Residual Block</strong><ul id="d3c0c5ab-e79b-44b7-8ea6-18f8900167b2" class="bulleted-list"><li style="list-style-type:circle">Used for MobileNetV2 and several mobile-optimized CNNs.</li></ul><ul id="b22bcfde-ff2a-46db-8d68-a0b0d44dad6c" class="bulleted-list"><li style="list-style-type:circle">Traditional <strong>Residual Block</strong> has wide → narrow → wide structure with the number of channels otherwise <strong>Inverted Residual Block</strong> is narrow → wide → narrow.</li></ul><figure id="330fd31c-2535-433f-8c75-1ea577707635" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2013.png"><img style="width:986px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2013.png"/></a></figure></li></ul><p id="a3a01add-d2a1-47bc-8def-6d57e4c5792c" class="">
+</p><h1 id="4e08e84b-5ca6-47d7-97ce-1eba49b132d4" class="">Neck</h1><p id="f28a7e0e-4bf5-4b79-b53f-c8ca1b475b94" class="">One Object Detection model including <strong>backbone (Feature Extraction)</strong> and <strong>Head (Object Detection)</strong>.</p><p id="7595e229-ef26-4f1a-a874-8241909ab58a" class="">To detect various size of objects, we often use <strong>bottom-up</strong> to element-wise/concatenate with <strong>top-down stream </strong>before leading to <strong>the head</strong>. <strong>The head</strong> will receive:</p><ul id="1915f8c1-e3ea-4218-b58a-5ddeeb3321ab" class="bulleted-list"><li style="list-style-type:disc"><strong>Rich spatial information </strong>from bottom-up stream.</li></ul><ul id="0c56eeff-9bb0-45e8-8220-6add2070d8d3" class="bulleted-list"><li style="list-style-type:disc"><strong>Rich semantic information </strong>from top-down stream.</li></ul><p id="9c57140d-628a-4a6d-9351-d043789846d9" class="">Two of these called <strong>Neck</strong>.</p><figure id="2cdc3194-87d7-4cd0-a7b9-7a39abf06405" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2014.png"><img style="width:637px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2014.png"/></a></figure><p id="7980b348-d2ac-4d32-8cfc-5246fdab170b" class="block-color-orange"><strong>Feature Pyramid Networks (FPN)</strong></p><p id="00ba8f92-5c50-430d-959c-6990d7cb74a3" class="">Detect various sizes of object ⇒ Use different size of images (Pyramid) → Object Detection. However, this will have high-consumed in memory ⇒ Cannot use in training.</p><p id="86707c30-dc1f-469a-b79b-701f7b0194aa" class="">⇒ Various features → 1 Object Detection.<div class="indented"><figure id="6182f690-e18e-44d3-afb4-9c3ecf27e75d" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2015.png"><img style="width:581px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2015.png"/></a></figure></div></p><p id="e33ccf4d-addf-4dea-b1aa-fd68e6ff65b8" class="">However, layer near image will have raw features ⇒ Cannot use these to increase the performance.</p><p id="269b8607-2e01-4730-8ba3-40c145345a66" class="">FPN is the feature extraction applied Pyramid while maintaining performance and speed.</p><figure id="48697813-f46e-48da-aebe-832f5b9f10e6" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2016.png"><img style="width:400px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2016.png"/></a></figure><p id="620b4e04-91b8-4385-b119-07018b239a57" class="">FPN has 2 flow:</p><ul id="b1039df9-2fbf-4469-90ac-ea81035e53f2" class="bulleted-list"><li style="list-style-type:disc">Bottom-up: CNN for feature extraction. The higher layer, the less resolution (less size of features) and the more semantic information.</li></ul><figure id="f02ecdef-85da-4c1e-87d9-0d0feb867b5d" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2017.png"><img style="width:400px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2017.png"/></a></figure><ul id="eae3dcc0-c829-4b4d-bc6f-a38eb133ad8a" class="bulleted-list"><li style="list-style-type:disc">Top-down: Build layers that have high resolution from high semantic layer.</li></ul><figure id="df54c31e-7288-419e-aaeb-d9d064523284" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2018.png"><img style="width:500px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2018.png"/></a></figure><p id="f6eca98e-b501-4f83-8e84-dfd8ab7aface" class="">However, in bottom-up, small objects will disappear ⇒ Cannot rebuild those small objects in top-down ⇒ Skip connection.</p><figure id="30f6166a-5879-456d-9940-1c3eab7a9a70" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2019.png"><img style="width:500px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2019.png"/></a></figure><h1 id="ebe14ce3-579e-4e33-8b4b-622a438ace54" class="">Detector</h1><h2 id="6f537143-5756-46c3-b6f0-774d8abf58cf" class="">Bag of Freebies for detector</h2><h3 id="72124740-8d6c-427f-ad36-937076eb0969" class="block-color-orange">CIoU-loss</h3><p id="54ed1ce4-b497-4d13-9cff-72cadc641c77" class="">We usually use IoU for detection loss:</p><figure id="4730a9ef-371e-4d8d-b842-2d08d15a7180" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2020.png"><img style="width:1108px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2020.png"/></a></figure><p id="076d4445-a4a2-42e9-9fa6-c63b8a97a44a" class=""><mark class="highlight-red"><strong>Problem:</strong></mark> there will be a problem if <strong>some situations</strong> that the predicted box and ground truth box is not overlapping ⇒ The result is always 0 so this loss cannot tell if which is better in <strong>those situations</strong>.</p><p id="72a52cbe-3982-4946-ab93-51f591b49d5c" class=""><strong><mark class="highlight-teal">Solution:</mark></strong> </p><p id="f702a842-cfe6-4fe1-998b-72f77668bd10" class=""><strong>GIoU:</strong> Adding component <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></span><span>﻿</span></span> that is the smallest box containing both predicted box and ground truth box (the distance between these two boxes if they are not overlapping).</p><figure id="3e4615d1-3513-4b62-810b-7ae0e4e7bd59" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2021.png"><img style="width:1108px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2021.png"/></a></figure><p id="0a07cfc2-67ac-4992-af7e-c12a36ff9dd4" class=""><mark class="highlight-red"><strong>Problem:</strong></mark> Using GIoU will lead the predicted box to expand until overlapping the ground truth box, after that predicted box start to shrink to reduce IoU.</p><p id="000ab9fa-33ac-4b5b-875d-4966eb12dfc9" class=""><strong><mark class="highlight-teal">Solution: </mark></strong></p><p id="b0204e51-2320-47d4-b0e3-1a953a619707" class=""><strong>DIoU: </strong>Adding distance between center of predicted box and center of ground truth box ⇒ <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span></span><span>﻿</span></span> normalize distance between these two centers.</p><figure id="ce5a125a-336f-4534-a9cc-594831ab389e" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2022.png"><img style="width:1108px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2022.png"/></a></figure><p id="7844eb98-8f58-4533-a179-ba849bf2ecd3" class=""><strong>CIoU:</strong> maintains the ratio of bounding boxes.</p><figure id="3756ccc7-bcc1-439f-8b9b-d4361f6af247" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2023.png"><img style="width:623px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2023.png"/></a></figure><h3 id="b8976284-cfe4-4939-8d5e-c43d7f367912" class="block-color-orange">CmBN</h3><ul id="fff8a319-a3a8-473f-a484-633eb26ba176" class="bulleted-list"><li style="list-style-type:disc"><strong>Batch Normalization</strong> calculates mean and variance of samples in mini-batch to normalize the input. However, if the <strong>mini-batch is small</strong> it produces some <strong>noise</strong>.<figure id="ba5938b6-3e2f-4f50-bbee-db254e35323e" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2024.png"><img style="width:1221px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2024.png"/></a></figure></li></ul><ul id="17be9057-2335-4ffa-8522-c9744b2d9106" class="bulleted-list"><li style="list-style-type:disc">There is a solution for this which is <strong>calculating several mini-batch</strong>. However, due to the <strong>change of the weights</strong> each time, this will lead to the <strong>false prediction</strong>.</li></ul><ul id="cb485a31-9933-462f-bd47-a0af581a7695" class="bulleted-list"><li style="list-style-type:disc"><strong>Cross-Iteration Batch Normalization (CBN)</strong> is invented to deal with this problem. Mean and variance can be calculated based on <strong>k</strong> previous iterations.</li></ul><figure id="f9389dc2-176b-43b0-8afc-2202925e3bb0" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2025.png"><img style="width:1232px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2025.png"/></a><figcaption>Cross-Iteration Batch Normalization with <strong>k</strong> = 2</figcaption></figure><ul id="f2e01976-3a85-49c0-848d-4bc29d83cb5f" class="bulleted-list"><li style="list-style-type:disc"><strong>Cross mini-batch Batch Normalization (CmBN):</strong> </li></ul><p id="5913f91f-962c-43e3-a98a-7b8ba77c98e9" class="">Similar to CBN except for mean and variance calculation based on entire batch instead of a single mini-batch.</p><h3 id="37198bb1-71d9-471e-9696-55b66112d244" class="block-color-orange">DropBlock regularization</h3><h3 id="d3bf0147-ad8d-405e-b939-ed46ea065e38" class="block-color-orange">Mosaic Data Augmentation</h3><h3 id="4bf9f120-557d-4394-807e-5f398417ee89" class="block-color-orange">Self-Adversarial Training</h3><p id="3767bab3-a573-49bc-be6d-e0f089a0bca2" class="">Self-Adversarial Training is a data augmentation method.</p><figure id="2d33bcb1-6285-43ba-a97f-64057f750495" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2026.png"><img style="width:1162px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2026.png"/></a><figcaption><a href="https://github.com/AlexeyAB/darknet/issues/5117">https://github.com/AlexeyAB/darknet/issues/5117</a></figcaption></figure><p id="83cbdb40-8890-4a16-8a35-b2f3ac8ecef6" class="">When using adversarial attack, model does not pay attention on dog/bicycle/car (the last image) and the output there is a cat (the first image). So the network should be trained on SAT to pay attention on more details.</p><p id="75740a60-9615-4dbd-ba1b-c7e0b7d618f5" class="">This method has 2 forward-backward stage:</p><ul id="d4e004bf-0fa5-43a5-ba87-be2cb3819adf" class="bulleted-list"><li style="list-style-type:disc"><strong>Stage 1 (Forward Stage):</strong> Model using forward propagation. After that,<strong> a</strong>ltering new image instead of updating weights to create deception to the model that there is no desired object on the image.</li></ul><ul id="f0614dd9-9a01-4642-bc3f-dea5eb45d1a7" class="bulleted-list"><li style="list-style-type:disc"><strong>Stage 2 (Backward Stage): </strong>Neural network is trained to detect object on modified image using old bounding boxes and labels.</li></ul><h3 id="e42b3643-854c-4ea4-8510-ae8529d02934" class="block-color-orange">Eliminate Grid Sensitivity</h3><p id="98adb41a-8f8c-4a36-84c0-0369797493ed" class="">
+</p><p id="69640dbc-4902-4ad3-afe8-67209e4fd44c" class="">
+</p><p id="e0a1c43d-488e-44bc-a89e-95fef2022221" class="">U-YOLO</p><figure id="a92c69b1-779d-4304-aad9-3994000e8b2a" class="image"><a href="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2027.png"><img style="width:1005px" src="YOLOv4%204293aa7e561a4378aec0f16332c60b32/Untitled%2027.png"/></a></figure><p id="1ab574f6-83ee-40dc-978f-df926ca66994" class="">
+</p><h1 id="d7b9dcbc-554a-4786-9db5-4d513d81a410" class="">References:</h1><p id="ae87c43b-2d42-43ea-84d9-c5cd6fec19c6" class=""><a href="https://dothanhblog.wordpress.com/2020/05/08/yolov4/">https://dothanhblog.wordpress.com/2020/05/08/yolov4/</a></p></div></article></body></html>
