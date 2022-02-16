@@ -4,7 +4,8 @@ const Article = (props) => (
     <Link href={'/' + props.title}>
         <div className="article">
             <h2>{props.title}</h2>
-            <p>{props.desc}</p>
+            <p>{props.time}</p>
+            <p>{props.categories}</p>
         </div>
     </Link>
 )

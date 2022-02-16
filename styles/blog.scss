@@ -1,8 +1,9 @@
+html{
+    scroll-behavior: auto;
+}
+
 .blog-body {
     background: linear-gradient(90deg,#201c29,#201c29 1px,#17141d 0,#17141d);
-    margin: auto;
-    // padding: auto;
-    // border-radius: 1rem;
 }
 
 h1 {
@@ -13,7 +14,7 @@ h1 {
     padding: 20px 20px;
     .blog-container {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
         justify-items: center;
         row-gap: 50px;
         .article {
@@ -48,14 +49,17 @@ h1 {
             }
 
             p {
+                text-align: start;
                 padding: 15px 0px;
+                margin: 0px;
                 color: white;
                 font-size: 20px;
             }
         }
 
         .article:hover {
-            
+            box-shadow: -1rem 0 10rem #000;
+            transform: scale(1.1);
             h2 {
                 // background: linear-gradient(90deg,#ff8a00,#e52e71);
                 background: linear-gradient(90deg,#e52e71, #55049C);

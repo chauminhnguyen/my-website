@@ -1,0 +1,674 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Evaluation Metrics of Language Model</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+	font-size: 100%;
+	background-color: #17141d;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+article {
+	background-color: white;
+	border-radius: 1rem;
+	padding: 50px 50px;
+	box-shadow: -1rem 0 3rem #000;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	color: rgb(55, 53, 47);
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="52a1aa71-330a-4742-9fd1-97d6e5c13542" class="page sans"><header><h1 class="page-title">Gradients trong Machine Learning</h1></header><div class="page-body"><h1 id="c8936586-54f4-431b-99df-c038051df55b" class="">Gradient</h1><p id="3778e03b-a611-4f19-8fc4-1a1e8bc2d49b" class="">Gradient thực chất chính là đạo hàm của một hàm số được dùng để biểu diễn tỉ lệ thay đổi (sự biến thiên) của một hàm số tại một điểm nào đó. Nó là một vector với hai tính chất chính sau:</p><ul id="2766eb7b-12c4-4201-b927-6823e62ddd4a" class="bulleted-list"><li style="list-style-type:disc">Hướng của vector sẽ hướng theo chiều tăng của hàm.</li></ul><ul id="e295974f-68db-4a1e-b442-2b98d9ffc6ae" class="bulleted-list"><li style="list-style-type:disc">Giá trị của Gradient sẽ là 0 tại các điểm cực tiểu (local minimum) hay cực đại (local maximum).</li></ul><p id="83a228b5-92df-471d-be75-44af2416b98d" class="">
+</p><figure id="3d38ce68-c0d9-4475-859d-72a4f8c57f39" class="image"><a href="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled.png"><img style="width:600px" src="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled.png"/></a></figure><p id="d81f0cfe-1801-4442-b46d-3d7dd1fd2354" class="">
+</p><p id="4b45662b-78d6-488d-b38b-3a4a5312a3ff" class=""><strong>Gradient </strong>thường được dùng với các hàm số có nhiều biến (multivariable functions), với các hàm có một biến ta thường dùng khá niệm <strong>Derivative</strong>. Bạn có thể nghe đến gradients như một cách để biểu thị độ dốc (slope) của hàm số, tuy nhiên trên thực tế nó cũng không hoàn toàn chính xác.</p><p id="5207e30a-805d-450d-9b97-b5dafc40b219" class="">
+</p><figure id="b105befc-3816-485d-9c84-3afe829f88f8" class="image"><a href="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%201.png"><img style="width:528px" src="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%201.png"/></a></figure><p id="678f26b3-985e-4215-91c2-479b5e3b77b0" class="">
+</p><p id="446c10f0-1049-4b9f-a376-6ee2e3d5231a" class="">Xét hàm số một biến <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>, đạo hàm của hàm số đó <strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">)</mo><mi mathvariant="normal">/</mi><mi>d</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">d(f)/d(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mclose">)</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong></p><p id="976b4467-8ce8-4a2f-ab4f-0061a5ea1932" class="">Đối với hàm nhiều biến, giả sử <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x, y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> thì đạo hàm của hàm số là:</p><figure id="3f3c1402-0b23-426f-867f-104570fd6d85" class="image"><a href="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%202.png"><img style="width:159px" src="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%202.png"/></a></figure><p id="1d07c2e9-7509-4684-bc67-ca068797d4e5" class="">Đối với hàm số có nhiều biến thì vector trên sẽ có nhiều component tương ứng với các derivative của hàm đó. </p><p id="4a2e5f95-6c64-4485-a237-0e26d8feb05c" class="">Để dễ hình dung, đối với hàm một biến Gradient sẽ giống như di chuyển backward và forward trên trục x:</p><figure id="d41d7c80-2765-462c-ac6e-9576f782d25c" class="image"><a href="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%203.png"><img style="width:576px" src="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%203.png"/></a></figure><p id="20ebe333-7552-4523-8e7e-6d34e00f822c" class="">Với hàm số 2 biến thì chúng ta sẽ di chuyển trên một mặt phẳng:</p><figure id="fd93c76c-34cc-4cf0-9aa5-57053aed156b" class="image"><a href="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%204.png"><img style="width:576px" src="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%204.png"/></a></figure><p id="77057837-0729-449f-ad47-14cc0663f1f9" class="">
+</p><blockquote id="d952789c-7869-431a-b7ca-9ad3b4c1c75a" class="">Gradient sẽ hướng theo chiều tăng của một hàm số, đi theo hướng của gradient chúng ta sẽ tìm được một local maximum</blockquote><blockquote id="4b6b781e-ffff-4515-b0ef-c9ac9299c251" class="">Ứng dụng phổ biến của gradient là tìm các điểm cực đại hoặc cực tiểu của hàm số (có thể có ràng buộc)</blockquote><h2 id="6a0e6000-8158-4caf-a0c2-f9955f1058de" class=""><strong>Gradient Descent</strong></h2><h3 id="8dcef594-d668-4c71-9b23-20fa4649ccbe" class="">Gradient Descent là gì?</h3><p id="d5b2ef12-7ea8-4bba-bd18-ff0b906d43dd" class="">Gradient Descent là một thuật toán tối ưu lặp (iterative optimization algorithm) được sử dụng trong các bài toán Machine Learning và Deep Learning (thường là các bài toán tối ưu lồi — Convex Optimization) với mục tiêu là tìm một tập các biến nội tại (internal parameters) cho việc tối ưu models.</p><p id="6258b1d1-c6fd-4025-a168-c3d94713376c" class="">● Gradient: là tỷ lệ độ nghiêng của đường dốc (rate of inclination or declination of a slope). Về mặt toán học, Gradient của một hàm số là đạo hàm của hàm số đó tương ứng với mỗi biến của hàm. Đối với hàm số đơn biến, chúng ta sử dụng khái niệm Derivative thay cho Gradient.</p><p id="50819173-60e7-404d-beb8-2e3659bf1197" class="">● Descent: là từ viết tắt của descending, nghĩa là giảm dần.</p><p id="7bbe5749-9c23-4259-918d-aa810dbd4aec" class="">Gradient Descent có nhiều dạng khác nhau như Stochastic Gradient Descent (SGD), Mini-batch SDG. Nhưng về cơ bản thì đều được thực thi như sau:</p><ol type="1" id="06ce248c-c4d1-4098-9366-17ef3a8bd87f" class="numbered-list" start="1"><li>Khởi tạo biến nội tại.</li></ol><ol type="1" id="3276c0ae-90d7-4c69-8109-c58c7286300b" class="numbered-list" start="2"><li>Đánh giá model dựa vào biến nội tại và hàm mất mát (Loss function).</li></ol><ol type="1" id="8da59d23-dff0-4e8e-9fa8-ff4b307eb1e4" class="numbered-list" start="3"><li>Cập nhật các biến nội tại theo hướng tối ưu hàm mất mát (finding optimal points).</li></ol><ol type="1" id="a2ead3ca-5549-4ad9-8c0d-56d646c288e8" class="numbered-list" start="4"><li>Lặp lại bước 2, 3 cho tới khi thỏa điều kiện dừng.</li></ol><p id="e1272bea-e064-45df-8cd3-e3714fe040e4" class="">Công thức cập nhật cho GD có thể được viết là:</p><figure id="f21435ed-9b75-4bf2-936c-59371bd88322" class="image"><a href="https://miro.medium.com/max/233/1*PzuhQWgoLqsgHCiB08z5zQ.png"><img style="width:336px" src="https://miro.medium.com/max/233/1*PzuhQWgoLqsgHCiB08z5zQ.png"/></a></figure><p id="91ca9a29-7003-4706-9e03-201815d1bcae" class="">trong đó <em>θ</em> là tập các biến cần cập nhật, <em>η </em>là tốc độ học (<em>learning rate)</em>, <em>▽Өf(θ)</em> là Gradient của hàm mất mát <em>f</em> theo tập <em>θ.</em></p><p id="1809e353-a8a6-46ce-a4fe-2a04fb97f155" class="">Gradient Descent có thể được minh họa như trong hình:</p><figure id="953fac4e-0744-463a-b2b2-6be43d523eeb" class="image"><a href="https://miro.medium.com/max/624/1*xIKkURjEciwAKh_kpFaWHQ.png"><img src="https://miro.medium.com/max/624/1*xIKkURjEciwAKh_kpFaWHQ.png"/></a></figure><p id="7708be7a-d819-4f0a-bbd8-0b53461fdb4b" class="">Tối ưu hàm mất mát là việc tìm các điểm optimal points mà ở đó hàm mất mát đạt cực đại (maximum) hoặc cực tiểu (minimum). Nếu hàm mất mát không phải là hàm lồi thì sẽ có các <em>local maximum</em> hoặc <em>local minimum points</em> bên cạnh các <em>global maximum</em> hoặc <em>global minimum</em> <em>points</em> như hình bên dưới. Mục tiêu của GD là tìm được các <em>global minimum points</em>. Tuy nhiên trong các bài toán tối ưu lồi áp dụng GD thì <strong>các local minimum points của hàm mất mát cũng chính là global minimum points của nó.</strong></p><figure id="e05292d0-9df8-4fe7-ad1f-c9da28bb016d" class="image"><a href="https://miro.medium.com/max/449/1*QXYOKUUQMsJrRnSXRCzHcA.png"><img src="https://miro.medium.com/max/449/1*QXYOKUUQMsJrRnSXRCzHcA.png"/></a></figure><p id="69671ab9-8bbe-4198-b57a-89c6561c4c4f" class="">Điều kiện dừng của GD có thể là:</p><p id="50727300-679f-43cb-b0b8-f3e8238ec1aa" class="">● Kết thúc tất cả các <em>epochs</em> đã được định sẵn.</p><p id="cee08ed5-4623-4cb1-af42-5a94df41b40b" class="">● Giá trị của hàm mất mát đủ nhỏ và độ chính xác của model đủ lớn.</p><p id="62be2ad8-7c8a-436b-9c77-9b60e972ec9e" class="">● Hàm mất mát có giá trị không thay đổi sau một số lần hữu hạn <em>epochs.</em></p><p id="58a807b4-0b26-430c-af55-e4f3405877a3" class="">Các bài toán trong thực tế áp dụng GD thường khó tìm được các <em>global minimum points</em>, đa phần rơi vào các<em> local minimum points </em>hoặc không phải các <em>optimal points</em> (not converging), tuy nhiên chúng ta vẫn có thể chấp nhận các kết quả của GD trả về khi model đã <strong>đủ tốt</strong> (good enough).</p><p id="087f289f-4b85-43b0-99f1-ce8e582a4870" class="">Trong một số phương pháp tối ưu như <strong>Gradient Descent</strong> chúng ta sẽ thường phải tính toán các partial derivatives. Có khá nhiều cách để tính toán các giá trị trên, tuy nhiên một trong những cách phổ biến và hiệu quả nhất là <strong>Reverse-Mode Autodiff.</strong></p><h2 id="3e91b084-8c72-4fb5-bffd-059c4ffb1253" class=""><strong>Reverse-Mode Autodiff</strong></h2><p id="14da0017-639f-4ab3-a431-78d591d3e64a" class="">(Coming soon)</p><h2 id="49237ed8-3d74-483a-b353-e802a75e0cc9" class="">Backpropagation</h2><p id="f4d18b23-e582-457b-a5b5-42aaba4aefaf" class=""><strong>Backpropagation Algorithm</strong> là một kĩ thuật thường được sử dụng trong trong quá trình training DNNs. Ý tưởng chung của thuật toán là sẽ đi từ output layer đến input layer và tính toán gradient của cost function tương ứng cho từng parameter (weight) của network. Gradient Descent, sau đó, sẽ được sử dụng để cập nhật các parameter đó.</p><p id="29cbcfef-f5f6-4904-9ac1-af76d18aa067" class="">Quá trình trên sẽ được lặp lại cho tới khi các parameter của network hội tụ. Thông thường chúng ta sẽ có một hyperparameter định nghĩa cho số lượng vòng lặp để thực hiện quá trình trên. Hyperparameter đó thường được gọi là số Epoch (hay số lần mà training set được duyệt qua một lần và weights được cập nhật). Nếu số lượng vòng lặp quá nhỏ, DNN có thể sẽ không cho ra kết quả tốt, và ngược lại thì thời gian training sẽ quá dài nếu số lượng vòng lặp quá lớn. Ở đây ta có một tradeoff giữa độ chính xác và thời gian training.</p><p id="40ec0147-5bd3-475e-8a61-c236ddfb81a3" class="">Tuy nhiên trên thực tế gradients thường sẽ có giá trị nhỏ dần khi đi xuống các layer thấp hơn. Kết quả là các cập nhật thực hiện bởi Gradient Descent không làm thay đổi nhiều weights của các layer đó, khiến chúng không thể hội tụ và DNN sẽ không thu được kết quả tốt. Hiện tượng này được gọi là <strong>Vanishing Gradients.</strong></p><h2 id="6fdcc198-bad5-414a-bc3a-d6059cda4677" class=""><strong>Vanishing Gradients</strong></h2><p id="e2276be1-7eee-4419-996d-84fc2bed882b" class="">Khi giá trị gradient nhỏ dần sẽ khiến cho các tham số của các lớp sâu hơn không thể thay đổi để cải thiện giá trị của chúng. Tệ hơn, việc này còn dẫn đến việc training mạng neural sẽ bị dừng lại. Một ví dụ về vấn đề này, đối với những activation function truyền thống như hyperbolic tangent function có gradients trong khoảng (-1, 1)</p><p id="5a6ea7e4-4cfe-437d-977f-5ce7e626921b" class="">
+</p><figure id="069e3b4a-3aff-4a65-93d2-b1397757ce2a" class="image"><a href="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%205.png"><img style="width:360px" src="Gradients%20trong%20Machine%20Learning%203d38ce68c0d94475859d72a4f8c57f39/Untitled%205.png"/></a></figure><p id="127af17c-f35d-4b00-96c8-562f7c303b3d" class="">Nếu sử dụng Chain Rule để tính toán gradient cho một layer dựa vào gradients của các layer trước đó thì giá trị gradient sẽ giảm đi rất nhanh theo cấp số nhân khi chúng ta di chuyển xuống các layer thấp hơn.</p><p id="7bd0bc0b-83cc-4caf-aa05-b03ebdbea1ab" class="">Trong nhiều trường hợp khác, gradients có thể có giá trị lớn hơn trong quá trình backpropagation, do nhân nhiều số hạng lớn liên tiếp nhau dẫn tới một số layers có giá trị cập nhật cho weights quá lớn khiến chúng phân kỳ (phân rã), tất nhiên DNN cũng sẽ không có kết quả như mong muốn. Hiện tượng này được gọi là <strong>Exploding Gradients</strong>, và thường gặp khi sử dụng Recurrent Neural Networks (RNNs).</p><h2 id="1b2a2019-afb1-470b-bc1c-f34f9441fb16" class=""><strong>Exploding Gradients</strong></h2><p id="9ffc1071-1c46-456c-a05b-0da5453ce4d4" class="">Trong deep multilayer Perceptron networks, exploding gradients có thể dẫn đến sự không ổn định trong mạng neural khiến cho model không thể học được từ tập dataset.</p><h3 id="963d086e-666a-45dc-a81b-dcc26228687d" class="">Làm sao để biết rằng mạng neural đang bị hiện tượng E<strong>xploding Gradients?</strong></h3><p id="d8f746f2-5815-4571-806f-275c18acce77" class="">Dưới đây là những dấu hiệu cho thấy mạng neural có thể bị exploding gradients trong quá trình training:</p><ul id="78601354-4303-4dc2-aee7-82079a9b508c" class="bulleted-list"><li style="list-style-type:disc">The model is unable to get traction on your training data (e.g. poor loss).</li></ul><ul id="9f56c7f5-0e64-4cd7-9022-2a1a7e112f38" class="bulleted-list"><li style="list-style-type:disc">The model is unstable, resulting in large changes in loss from update to update.</li></ul><ul id="fb53a719-088e-410b-bca7-d2920280d8ea" class="bulleted-list"><li style="list-style-type:disc">The model loss goes to NaN during training.</li></ul><p id="390be5e6-2c36-49c3-b900-e6a4facb202a" class="">Nếu mạng neural có những biểu hiện trên, ta nên đào sâu hơn để chắc chắn rằng mạng neural này đã bị exploding gradients.</p><p id="b438efef-cc7c-41d9-bb82-6a4887e6036e" class="">Và dưới đây là những dấu hiệu cho thấy mạng neural bị exploding gradients:</p><ul id="6af6b4a9-aa15-4a7a-9118-2b5516860afc" class="bulleted-list"><li style="list-style-type:disc">The model weights quickly become very large during training.</li></ul><ul id="4e1b529d-c45b-4402-97a9-c9faef32d52b" class="bulleted-list"><li style="list-style-type:disc">The model weights go to NaN values during training.</li></ul><ul id="98cec5c4-f08a-4edf-b66e-6b9143d3a0b5" class="bulleted-list"><li style="list-style-type:disc">The error gradient values are consistently above 1.0 for each node and layer during training.</li></ul><h2 id="3b512317-b4c2-4657-a44a-1afb08fbde28" class="">Làm sao để cải thiện mạng neural khi bị <strong>Exploding Gradients và Vanishing Gradients?</strong></h2><ol type="1" id="d7c9069c-72a4-4727-90c6-b41196f8d431" class="numbered-list" start="1"><li>Thiết kế lại mạng neural</li></ol><ol type="1" id="355a8382-a562-4b58-8ea5-d65581da47cc" class="numbered-list" start="2"><li>Sử dụng Long Short-Term Memory Networks (Cho NLP)</li></ol><ol type="1" id="750504e2-05b7-4a96-a69a-bc1cec51a22d" class="numbered-list" start="3"><li>Sử dụng Gradient Clipping</li></ol><ol type="1" id="e9510b0c-1dff-4a74-9834-09d530b391be" class="numbered-list" start="4"><li>Sử dụng Weight Regularization</li></ol><p id="145df387-3f54-4058-ad92-af0e6488d950" class="">
+</p></div></article></body></html>
