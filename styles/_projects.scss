@@ -29,6 +29,22 @@
         padding: 0px 50px;
         height: 100px;
 
+        button {
+            // background-color: red;
+            background-color: transparent;
+            background-repeat: no-repeat;
+            border: none;
+            cursor: pointer;
+            overflow: hidden;
+            outline: none;
+
+            position: absolute;
+            height: 100%;
+            padding: 20px 20px;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+
         span {
             cursor: pointer;
             display: block;
@@ -63,7 +79,8 @@
         position: relative;
         width: 75vw;
         height: 75vh;
-        transform: translateY(15%);
+        top: 15%;
+        // transform: translateY(15%);
 
         $border: 5px;
         background: linear-gradient(
@@ -98,7 +115,8 @@
                 // font-size: 30px;
             }
         
-            h3 {
+            h3, li {
+                color: white;
                 // max-width: 30%;
                 font-size: calc(min(max(10px, 1.5vw), 20px));
                 // font-size: 20px;

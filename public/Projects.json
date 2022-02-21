@@ -1,0 +1,76 @@
+{
+    "projects": [
+        {
+            "name": "Build music searching system",
+            "time": "09/2020 - 12/2020",
+            "Responsibilities": [
+                "Crawl music and music lyrics from music websites",
+                "Build keyword and lyric query model"],
+            "Achievements": [
+                "Create a self-modified system to solve search lyrics problem",
+                "Vietnamese music and music lyrics dataset"
+            ],
+            "github_link": "",
+            "gitlab_link": "",
+            "web_link": ""
+        },
+        {
+            "name": "Optical character recognition (OCR) for in-the-wild images",
+            "time": "08/2020 - 01/2021",
+            "Responsibilities": [
+                "Survey on several OCR techniques for Vietnamese address domain",
+                "Design a model to extract text from Vietnamese address image"],
+            "Achievements": [
+                "Design a pipeline for Vietnamese address images",
+                "Build full OCR pipeline for Vietnamese address images"
+            ],
+            "github_link": "",
+            "gitlab_link": "",
+            "web_link": ""
+        },
+        {
+            "name": "Create poem from image",
+            "time": "08/2021 - 1/2022",
+            "Responsibilities": [
+                "Create the model with input as image and output as Vietnamese poem related to the input image"],
+            "Achievements": [
+                "Design the framework for the problem",
+                "Design the suitable data format for the framework",
+                "Survey people about the generated poem from the model",
+                "Thesis report about the model and the dataset"
+            ],
+            "github_link": "",
+            "gitlab_link": "",
+            "web_link": ""
+        },
+        {
+            "name": "Counting cars in the video (AI Challenge)",
+            "time": "7/2020 - 8/2020",
+            "Responsibilities": [
+                "Create a tracking video model"],
+            "Achievements": [
+                "Have a first impression in AI competition",
+                "A tracking video model for car traffic video",
+                "Survey people about the generated poem from the model",
+                "Achieve the 17th rank out of 53 teams"
+            ],
+            "github_link": "",
+            "gitlab_link": "",
+            "web_link": ""
+        },
+        {
+            "name": "Traffic sign detection (Zalo AI Challenge)",
+            "time": "10/2020 - 11/2020",
+            "Responsibilities": [
+                "Visualize and analyze the dataset",
+                "Coding the augmentation for the dataset"
+            ],
+            "Achievements": [
+                "The augmentation pipeline for the traffic sign dataset"
+            ],
+            "github_link": "",
+            "gitlab_link": "",
+            "web_link": ""
+        }
+    ]
+}

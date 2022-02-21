@@ -2,8 +2,13 @@ import Article from '../components/Article.js'
 import React from 'react';
 import fs from 'fs';
 import Head from 'next/head'
+import { useState } from 'react';
+import {motion} from "framer-motion"
+
 
 export default function Blog(props) {
+    const [selectedId, setSelectedId] = useState(null)
+
     return (
         <html>
             <Head>
@@ -21,11 +26,11 @@ export default function Blog(props) {
                 <section className="blog" id="blog-section">
                     <div className='blog-container'>
                         {
-                            props.fileNames.map((ele) => (
+                            props.fileNames.map((ele, it) => (
                                 <Article 
-                                key={ele.replace(".html", "")}
+                                key={it}
                                 time={new Date().toLocaleDateString()}
-                                title= {ele.replace(".html", "")} 
+                                title= {ele.replace(".html", "")}
                                 categories="Machine Learning"/>
                             ))
                         }
