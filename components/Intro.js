@@ -1,8 +1,18 @@
 import {Link as LinkScroll} from 'react-scroll'
 import Link from 'next/link'
-
+import {motion} from 'framer-motion'
 
 export default function Intro () {
+    const btn_variant = {
+        initial : {
+            scale:1.5
+        },
+        whileHover : {
+            scale: 1.6,
+            textShadow: "0px 0px 8px rgb(255,255,255)",
+            boxShadow: "0px 0px 8px rgb(255,255,255)"
+        }
+    }
       return (
         <section className="intro">
             <nav>
@@ -37,11 +47,22 @@ export default function Intro () {
                 <h3 className="hello">I am a little person with a passion in AI and really love art</h3>
                 <div className="btn">
                     <LinkScroll to="info-section">
-                        <button type="button">Portfolio</button>
+                        <motion.button type="button"
+                        variants={btn_variant}
+                        initial="initial"
+                        whileHover="whileHover"
+                        >
+                            Portfolio
+                        </motion.button>
                     </LinkScroll>
                     
                     <Link href="/blog">
-                        <button type="button">My Blog</button>
+                        <motion.button type="button"
+                        variants={btn_variant}
+                        initial="initial"
+                        whileHover="whileHover">
+                            My Blog
+                        </motion.button>
                     </Link>
                 </div>
                 
