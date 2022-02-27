@@ -76,6 +76,12 @@
 
 
     .project-container {
+        @media screen and (max-width: 900px) {
+            .thumbnail {
+                display: none;
+            }
+        }
+
         position: relative;
         width: 75vw;
         height: 75vh;
@@ -132,7 +138,6 @@
                 width: 50%;
                 flex: 1;
 
-        
                 svg {
                     transform: scale(5);
                     color: white;

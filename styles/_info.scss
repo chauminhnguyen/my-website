@@ -92,6 +92,13 @@
             }
         }
 
+        @media screen and (max-width: 467px) {
+            .skill-container {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
         img {
             grid-area: pfp;
             mix-blend-mode: luminosity;
