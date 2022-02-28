@@ -1,6 +1,7 @@
 {
     "projects": [
         {
+            "id": 0,
             "name": "Build music searching system",
             "time": "09/2020 - 12/2020",
             "Responsibilities": [
@@ -15,6 +16,7 @@
             "web_link": ""
         },
         {
+            "id": 1,
             "name": "Optical character recognition (OCR) for in-the-wild images",
             "time": "08/2020 - 01/2021",
             "Responsibilities": [
@@ -29,6 +31,7 @@
             "web_link": ""
         },
         {
+            "id": 2,
             "name": "Create poem from image",
             "time": "08/2021 - 1/2022",
             "Responsibilities": [
@@ -44,6 +47,7 @@
             "web_link": ""
         },
         {
+            "id": 3,
             "name": "Counting cars in the video (AI Challenge)",
             "time": "7/2020 - 8/2020",
             "Responsibilities": [
@@ -59,6 +63,7 @@
             "web_link": ""
         },
         {
+            "id": 4,
             "name": "Traffic sign detection (Zalo AI Challenge)",
             "time": "10/2020 - 11/2020",
             "Responsibilities": [

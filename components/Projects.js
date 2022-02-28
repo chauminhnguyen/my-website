@@ -94,7 +94,10 @@ function Projects() {
                     </div>
         
                     <div className="thumbnail">
-                        <img src="/home/Thumbnail.png" alt="" />
+                        <img src={"/home/Thumbnails/" + jsonData['projects'][index]['id'] + ".svg"} alt="" />
+                        {/* {jsonData['projects'][index]['id'].map((ele, it) => (
+                            <img key={it} src={"/home/Thumbnails/" + ele + ".svg"} alt="" />
+                        ))} */}
                     </div>
                 </motion.div>
             </AnimatePresence>
