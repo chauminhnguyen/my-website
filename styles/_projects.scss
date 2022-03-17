@@ -109,7 +109,7 @@
             flex-grow: 1;
             h1 {
                 font-weight: bold;
-                font-size: calc(min(max(20px, 3vw), 50px));
+                font-size: calc(min(max(10px, 3vw), 40px));
                 // font-size: 50px;
                 color: #FCA326;
             }
@@ -117,7 +117,7 @@
             h2 {
                 padding: 20px 0px;
                 font-weight: bold;
-                font-size: calc(min(max(15px, 2.5vw), 30px));
+                font-size: calc(min(max(10px, 2.5vw), 20px));
                 // font-size: 30px;
             }
         
@@ -131,7 +131,7 @@
             }
         
             .icon {
-                padding-top: 100px;
+                padding-top: 30px;
                 padding-left: 30px;
                 display: flex;
                 justify-content: space-between;
@@ -139,12 +139,12 @@
                 flex: 1;
 
                 svg {
-                    transform: scale(5);
+                    transform: scale(3);
                     color: white;
                 }
         
                 img {
-                    transform: scale(1.25) translateY(-30%);
+                    transform: scale(0.75) translateY(-50%);
                 }
             }
         }
