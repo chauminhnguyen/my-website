@@ -59,12 +59,12 @@
             padding-left: 100px;
 
             h1 {
-                font-size: calc(min(max(20px, 4vw), 45px));
+                font-size: calc(min(max(15px, 4vw), 30px));
                 font-weight: bold;
             }
 
             h2 {
-                font-size: calc(min(max(15px, 2vw), 20px));
+                font-size: calc(min(max(10px, 3vw), 20px));
                 padding-top: 25px;
                 text-align: justify;
                 text-justify: inter-word;
@@ -79,7 +79,7 @@
                 // text-decoration: underline;
                 font-weight: bold;
                 justify-content: center;
-                font-size: calc(min(max(15px, 2vw), 25px));
+                font-size: calc(min(max(10px, 2vw), 20px));
                 max-width: 100px;
                 // padding: 5px;
             }
@@ -88,7 +88,7 @@
                 margin: 0px 0px;
                 padding-left: 30px;
                 color: white;
-                font-size: calc(min(max(15px, 2vw), 25px));
+                font-size: calc(min(max(10px, 2vw), 20px));
             }
         }
 
@@ -106,7 +106,7 @@
             box-shadow: 0px 4px 8px black;
             // transform: scale(75%);
             // transform: scale(75%);
-            width: 75%;
+            width: 60%;
             height: auto;
             margin-left: auto;
             margin-right: auto;
