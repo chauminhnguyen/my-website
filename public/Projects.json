@@ -11,7 +11,7 @@
                 "Create a self-modified system to solve search lyrics problem",
                 "Vietnamese music and music lyrics dataset"
             ],
-            "github_link": "",
+            "github_link": "https://github.com/chauminhnguyen/music_query",
             "gitlab_link": "",
             "web_link": ""
         },
@@ -26,7 +26,7 @@
                 "Design a pipeline for Vietnamese address images",
                 "Build full OCR pipeline for Vietnamese address images"
             ],
-            "github_link": "",
+            "github_link": "https://github.com/chauminhnguyen/OCR",
             "gitlab_link": "",
             "web_link": ""
         },
@@ -42,9 +42,9 @@
                 "Survey people about the generated poem from the model",
                 "Thesis report about the model and the dataset"
             ],
-            "github_link": "",
+            "github_link": "https://github.com/chauminhnguyen/Dual-Transformer",
             "gitlab_link": "",
-            "web_link": ""
+            "web_link": "https://huggingface.co/spaces/crylake/img2poem"
         },
         {
             "id": 3,
@@ -57,7 +57,7 @@
                 "A tracking video model for car traffic video",
                 "Achieve the 17th rank out of 53 teams"
             ],
-            "github_link": "",
+            "github_link": "https://github.com/chauminhnguyen/AIC",
             "gitlab_link": "",
             "web_link": ""
         },
@@ -72,7 +72,7 @@
             "Achievements": [
                 "The augmentation pipeline for the traffic sign dataset"
             ],
-            "github_link": "",
+            "github_link": "https://github.com/chauminhnguyen/augumentation_coco",
             "gitlab_link": "",
             "web_link": ""
         }
