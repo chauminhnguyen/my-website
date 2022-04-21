@@ -38,11 +38,27 @@
 
         h2 {
             letter-spacing: 1vw;
-            font-size: calc(min(max(30px, 5vw), 48px));
+            font-size: calc(min(max(30px, 5vw), 64px));
         }
 
         h3 {
             font-size: calc(min(max(10px, 5vw), 24px));
+        }
+
+        @media screen and (max-width: 467px) {
+            h1 {
+                letter-spacing: 2vw;
+                font-size: calc(min(max(40px, 8vw), 38px))
+            }
+
+            h2 {
+                letter-spacing: 1vw;
+                font-size: calc(min(max(30px, 5vw), 24px));
+            }
+
+            h3 {
+                font-size: calc(min(max(10px, 5vw), 12px));
+            }
         }
 
         .btn {
@@ -54,6 +70,15 @@
                 background: transparent;
                 border: 2px solid white;
                 border-radius: 50px;
+            }
+
+            @media screen and (max-width: 467px) {
+                flex-direction: column;
+                row-gap: 40px;
+                button {
+                    padding: 10px 25px;
+                    font-size: 10px;
+                }
             }
         }
     }
