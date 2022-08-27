@@ -56,7 +56,7 @@ export default function Intro () {
                         </motion.button>
                     </LinkScroll>
                     
-                    <Link href="/blog">
+                    <Link href="/blogs">
                         <motion.button type="button"
                         variants={btn_variant}
                         initial="initial"
