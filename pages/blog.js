@@ -2,12 +2,13 @@ import Article from '../components/Article.js'
 import React from 'react';
 import fs from 'fs';
 import Head from 'next/head'
-import { useState } from 'react';
-import {motion} from "framer-motion"
+// import { useState } from 'react';
+// import {motion} from "framer-motion"
 
 
 export default function Blog(props) {
-    const [selectedId, setSelectedId] = useState(null)
+    const jsonData = require('../public/Blogs.json');
+    // const [selectedId, setSelectedId] = useState(null)
 
     return (
         <html>
@@ -26,12 +27,20 @@ export default function Blog(props) {
                 <section className="blog" id="blog-section">
                     <div className='blog-container'>
                         {
-                            props.fileNames.map((ele, it) => (
+                            // props.fileNames.map((ele, it) => (
+                            //     <Article 
+                            //     key={it}
+                            //     time={new Date().toLocaleDateString()}
+                            //     title= {ele.replace(".html", "")}
+                            //     categories="Machine Learning"/>
+                            // ))
+
+                            jsonData['blogs'].map((ele, it) => (
                                 <Article 
                                 key={it}
-                                time={new Date().toLocaleDateString()}
-                                title= {ele.replace(".html", "")}
-                                categories="Machine Learning"/>
+                                time={ele['time']}
+                                title= {ele['name']}
+                                categories={ele['topic']}/>
                             ))
                         }
                     </div>

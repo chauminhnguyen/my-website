@@ -1,0 +1,39 @@
+{
+    "blogs": [
+        {
+            "name": "Binary Classifiers",
+            "time": "8/26/2022",
+            "topic": "Machine Learning"
+        },
+        {
+            "name": "Convolutional Neural Networks",
+            "time": "8/26/2022",
+            "topic": "Computer Vision"
+        },
+        {
+            "name": "CNN Architectures",
+            "time": "8/26/2022",
+            "topic": "Computer Vision"
+        },
+        {
+            "name": "Evaluation Metrics of Language Models",
+            "time": "8/26/2022",
+            "topic": "Natural Language Processing"
+        },
+        {
+            "name": "Log-Likelihood",
+            "time": "8/26/2022",
+            "topic": "Machine Learning"
+        },
+        {
+            "name": "Neural-based Language Models",
+            "time": "8/26/2022",
+            "topic": "Natural Language Processing"
+        },
+        {
+            "name": "Regularization",
+            "time": "8/26/2022",
+            "topic": "Machine Learning"
+        }
+    ]
+}
