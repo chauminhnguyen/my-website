@@ -3,37 +3,37 @@
         {
             "name": "Binary Classifiers",
             "time": "8/26/2022",
-            "topic": "Machine Learning"
+            "topic": "ML"
         },
         {
             "name": "Convolutional Neural Networks",
             "time": "8/26/2022",
-            "topic": "Computer Vision"
+            "topic": "CV"
         },
         {
             "name": "CNN Architecture",
             "time": "8/26/2022",
-            "topic": "Computer Vision"
+            "topic": "CV"
         },
         {
             "name": "Evaluation Metrics of Language Model",
             "time": "8/26/2022",
-            "topic": "Natural Language Processing"
+            "topic": "NLP"
         },
         {
             "name": "Log-Likelihood",
             "time": "8/26/2022",
-            "topic": "Machine Learning"
+            "topic": "ML"
         },
         {
             "name": "Neural-based Language Model",
             "time": "8/26/2022",
-            "topic": "Natural Language Processing"
+            "topic": "NLP"
         },
         {
             "name": "Regularization",
             "time": "8/26/2022",
-            "topic": "Machine Learning"
+            "topic": "ML"
         }
     ]
 }
