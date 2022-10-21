@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 
 export const getStaticPaths = async () => {
     const files = fs.readdirSync('posts');
@@ -15,7 +15,7 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async ({ params }) => {
-    const jsonBlogs = require('../public/Blogs.json');
+    // const jsonBlogs = require('../public/Blogs.json');
     
     return {
         props: {
