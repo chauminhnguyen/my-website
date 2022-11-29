@@ -5,7 +5,7 @@ const Article = (props) => (
         <div className="article">
             <h2>{props.title}</h2>
             <p className='time'>Date: {props.time}</p>
-            <Link href={'/blogs/' + props.categories}>
+            <Link href={props.categories}>
                 <div className='categories'>
                     <p>{props.categories}</p>
                 </div>
